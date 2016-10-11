@@ -17,13 +17,12 @@ const check = author => (author.slice(-1) === ' ' ? author.substr(0, author.leng
 
 export default (contents) => {
   /* eslint max-len: 0 */
-  const pattern = /(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(\s)(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(\s)([0-9]+)(\s)([0-9]+:[0-9]+:[0-9]+)(\s)([0-9]{4})(\s+)(.+)(\s+)([\(<]*.+[\)>]*)/;
+  const pattern = /([a-zA-Z]{3})(\s)([a-zA-Z]{3})(\s+)([0-9]+)(\s)([0-9]+:[0-9]+:[0-9]+)(\s)([0-9]{4})(\s+)(.+)(\s+)([\(<]*.+[\)>]*)/;
   return contents
     .split('\n')
     .reduce((origin, line) => {
       const result = line.match(pattern);
       if (result === null) return origin;
-
       const { year, author } = { year: result[9], author: result[11] };
       const parsedYear = parseInt(year, 10);
       const checkedAuthor = check(author);
