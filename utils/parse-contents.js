@@ -14,7 +14,7 @@ export default (title, contents) => {
 
   const table = new Table({ head });
 
-  const commitNumPerYear = years
+  const commitNumPerYear = yearsArray
     .reduce((prevData, year) => {
       const commitNumInYear = Object.keys(commitData[year])
         .reduce((prevNum, author) => {
