@@ -1,45 +1,47 @@
 import chalk from 'chalk';
 import Table from 'cli-table';
 
+/* eslint no-console: 0 */
+
 export default (title, contents) => {
   console.log(chalk.yellow(title));
 
   const { years, authors, commitData } = contents;
-  const yearsAry = Array.from(years).sort();
+  const yearsArray = Array.from(years).sort();
 
-  const empty = [''];
-  const head = empty.concat(yearsAry);
+  const initialHeadData = [''];
+  const head = initialHeadData.concat(yearsArray);
 
   const table = new Table({ head });
 
-  const commitsPerYear = Object.keys(commitData)
+  const commitNumPerYear = years
     .reduce((prevData, year) => {
-      const yearCommits = Object.keys(commitData[year])
-        .reduce((totalNum, author) => {
-          if (typeof commitData[year][author] === 'undefined' || commitData[year][author] === null) {
-            return totalNum;
+      const commitNumInYear = Object.keys(commitData[year])
+        .reduce((prevNum, author) => {
+          const commitNumOfAuthor = commitData[year][author];
+          if (typeof commitNumOfAuthor === 'undefined' || commitNumOfAuthor === null) {
+            return prevNum;
           }
-          return totalNum + commitData[year][author];
+          return prevNum + commitNumOfAuthor;
         }, 0);
       return Object.assign({}, prevData, {
-        [year]: yearCommits,
+        [year]: commitNumInYear,
       });
     }, {});
 
   authors
     .forEach((_, author) => {
-      const commits = yearsAry
+      const commitNumArray = yearsArray
         .map((year) => {
           const commitNum = commitData[year][author];
           if (typeof commitNum === 'undefined') return 0;
-
-          const totalCommits = commitsPerYear[year];
-          const commitRatio = Math.floor(((commitNum / totalCommits) * 10000)) / 100;
+          const totalCommitNum = commitNumPerYear[year];
+          const commitRatio = Math.floor(((commitNum / totalCommitNum) * 10000)) / 100;
           return `${commitNum}(${commitRatio}%)`;
         });
 
       table.push({
-        [author]: commits,
+        [author]: commitNumArray,
       });
     });
 
