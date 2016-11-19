@@ -13,7 +13,7 @@ export default (title, contents) => {
   const table = new Table({ head });
 
   authors
-    .forEach((origin, author) => {
+    .forEach((_, author) => {
       const commits = yearsAry
         .map((year) => {
           const commitNum = commitData[year][author];
