@@ -1,10 +1,12 @@
 import path from 'path';
 import {
-  format,
+  formatContents,
   getContents,
   getFiles,
-  parse,
+  parseContents,
 } from './utils';
+
+/* eslint no-console: 0 */
 
 const start = async () => {
   const dirPath = path.join(__dirname, './changelog');
@@ -12,8 +14,8 @@ const start = async () => {
   files.forEach(async (fileName) => {
     const filePath = path.join(__dirname, `./changelog/${fileName}`);
     const contents = await getContents(filePath);
-    const formatedContents = format(contents);
-    parse(fileName, formatedContents);
+    const formatedContents = formatContents(contents);
+    parseContents(fileName, formatedContents);
   });
 };
 
