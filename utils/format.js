@@ -1,14 +1,14 @@
-const add = (year, author, origin) => {
-  if (typeof origin[year] === 'undefined') {
-    return Object.assign({}, origin, {
+const add = (year, author, data) => {
+  if (typeof data[year] === 'undefined') {
+    return Object.assign({}, data, {
       [year]: {
         [author]: 1,
       },
     });
   }
-  return Object.assign({}, origin, {
-    [year]: Object.assign({}, origin[year], {
-      [author]: origin[year][author] ? origin[year][author] + 1 : 1,
+  return Object.assign({}, data, {
+    [year]: Object.assign({}, data[year], {
+      [author]: data[year][author] ? data[year][author] + 1 : 1,
     }),
   });
 };
@@ -23,11 +23,12 @@ export default (contents) => {
     .reduce((data, line) => {
       const result = line.match(pattern);
       if (result === null) return data;
+
       const [year, author] = [result[9], result[11]];
       const parsedYear = parseInt(year, 10);
       const checkedAuthor = check(author);
-      const { years, authors, commitData } = data;
 
+      const { years, authors, commitData } = data;
       if (!years.has(parsedYear)) years.add(parsedYear);
       if (!authors.has(checkedAuthor)) authors.add(checkedAuthor);
       const newCommitData = add(year, checkedAuthor, commitData);
