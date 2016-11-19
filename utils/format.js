@@ -23,7 +23,7 @@ export default (contents) => {
     .reduce((origin, line) => {
       const result = line.match(pattern);
       if (result === null) return origin;
-      const { year, author } = { year: result[9], author: result[11] };
+      const [year, author] = [result[9], result[11]];
       const parsedYear = parseInt(year, 10);
       const checkedAuthor = check(author);
       const { years, authors, commitData } = origin;
