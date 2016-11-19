@@ -20,13 +20,13 @@ export default (contents) => {
   const pattern = /([a-zA-Z]{3})(\s)([a-zA-Z]{3})(\s+)([0-9]+)(\s)([0-9]+:[0-9]+:[0-9]+)(\s)([0-9]{4})(\s+)(.+)(\s+)([\(<]*.+[\)>]*)/;
   return contents
     .split('\n')
-    .reduce((origin, line) => {
+    .reduce((data, line) => {
       const result = line.match(pattern);
-      if (result === null) return origin;
+      if (result === null) return data;
       const [year, author] = [result[9], result[11]];
       const parsedYear = parseInt(year, 10);
       const checkedAuthor = check(author);
-      const { years, authors, commitData } = origin;
+      const { years, authors, commitData } = data;
 
       if (!years.has(parsedYear)) years.add(parsedYear);
       if (!authors.has(checkedAuthor)) authors.add(checkedAuthor);
