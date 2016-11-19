@@ -1,11 +1,11 @@
-import format from './format';
+import formatContents from './format-contents';
 import getContents from './get-contents';
 import getFiles from './get-files';
-import parse from './parse';
+import parseContents from './parse-contents';
 
 export {
-  format,
+  formatContents,
   getContents,
   getFiles,
-  parse,
+  parseContents,
 };
