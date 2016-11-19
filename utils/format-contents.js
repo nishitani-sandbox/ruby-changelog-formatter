@@ -1,19 +1,19 @@
-const add = (year, author, data) => {
-  if (typeof data[year] === 'undefined') {
-    return Object.assign({}, data, {
+const generateCommitData = (year, author, oldData) => {
+  if (typeof oldData[year] === 'undefined') {
+    return Object.assign({}, oldData, {
       [year]: {
         [author]: 1,
       },
     });
   }
-  return Object.assign({}, data, {
-    [year]: Object.assign({}, data[year], {
-      [author]: data[year][author] ? data[year][author] + 1 : 1,
+  return Object.assign({}, oldData, {
+    [year]: Object.assign({}, oldData[year], {
+      [author]: oldData[year][author] ? oldData[year][author] + 1 : 1,
     }),
   });
 };
 
-const check = author => (author.slice(-1) === ' ' ? author.substr(0, author.length - 1) : author);
+const trimTrailingWhiteSpace = author => (author.slice(-1) === ' ' ? author.substr(0, author.length - 1) : author);
 
 export default (contents) => {
   /* eslint max-len: 0 */
@@ -26,12 +26,12 @@ export default (contents) => {
 
       const [year, author] = [result[9], result[11]];
       const parsedYear = parseInt(year, 10);
-      const checkedAuthor = check(author);
+      const checkedAuthor = trimTrailingWhiteSpace(author);
 
-      const { years, authors, commitData } = data;
+      const { years, authors, commitData: oldCommitData } = data;
       if (!years.has(parsedYear)) years.add(parsedYear);
       if (!authors.has(checkedAuthor)) authors.add(checkedAuthor);
-      const newCommitData = add(year, checkedAuthor, commitData);
+      const newCommitData = generateCommitData(year, checkedAuthor, oldCommitData);
 
       return {
         years,
