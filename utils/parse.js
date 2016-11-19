@@ -12,13 +12,30 @@ export default (title, contents) => {
 
   const table = new Table({ head });
 
+  const commitsPerYear = Object.keys(commitData)
+    .reduce((prevData, year) => {
+      const yearCommits = Object.keys(commitData[year])
+        .reduce((totalNum, author) => {
+          if (typeof commitData[year][author] === 'undefined' || commitData[year][author] === null) {
+            return totalNum;
+          }
+          return totalNum + commitData[year][author];
+        }, 0);
+      return Object.assign({}, prevData, {
+        [year]: yearCommits,
+      });
+    }, {});
+
   authors
     .forEach((_, author) => {
       const commits = yearsAry
         .map((year) => {
           const commitNum = commitData[year][author];
           if (typeof commitNum === 'undefined') return 0;
-          return commitNum;
+
+          const totalCommits = commitsPerYear[year];
+          const commitRatio = Math.floor(((commitNum / totalCommits) * 10000)) / 100;
+          return `${commitNum}(${commitRatio}%)`;
         });
 
       table.push({
