@@ -4,7 +4,13 @@
   "description": "for nishitaniyuki gp",
   "dependencies": {
     "chalk": "^1.1.3",
-    "cli-table": "^0.3.1"
+    "cli-table": "^0.3.1",
+    "csv-stringify": "^1.0.4",
+    "isomorphic-fetch": "^2.2.1",
+    "jsdom": "^9.8.3",
+    "lodash": "^4.17.2",
+    "moment": "^2.17.1",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.16.0",
@@ -16,7 +22,17 @@
     "eslint-plugin-import": "^2.0.0"
   },
   "scripts": {
-    "parse": "babel-node parse-to-text.js"
+    "parse": "babel-node parse-to-text.js",
+    "restart": "yarn run remove:index && yarn run create:index",
+    "create:index": "curl -XPUT http://localhost:9200/ruby-info --data @mappings.json",
+    "check:index": "curl -XGET http://localhost:9200/ruby-info?pretty",
+    "remove:index": "curl -XDELETE http://localhost:9200/ruby-info",
+    "generate-bulk:commits": "babel-node lib/changelog/generate-bulk.js",
+    "generate-bulk:mails": "babel-node lib/mailinglist/generate-files.js",
+    "generate-csv:mails": "babel-node lib/mailinglist/generate-csv.js",
+    "insert:commits": "curl -XPOST http://localhost:9200/_bulk --data-binary @dist/changelog-YARV.json; echo",
+    "insert:mails": "curl -XPOST http://localhost:9200/_bulk --data-binary @dist/ruby-math.json; echo",
+    "post:test": "babel-node post.js"
   },
   "author": "nishitani",
   "license": "MIT"

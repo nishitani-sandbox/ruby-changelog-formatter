@@ -1,0 +1,66 @@
+{
+  "settings": {
+    "index": {
+      "analysis": {
+        "tokenizer": {
+          "kuromoji_tokenizer_search": {
+            "type": "kuromoji_tokenizer",
+            "mode": "search",
+            "discard_punctuation" : "true"
+          }
+        },
+        "analyzer": {
+          "kuromoji_analyzer": {
+            "type": "custom",
+            "tokenizer": "kuromoji_tokenizer_search",
+            "filter": [
+              "kuromoji_baseform",
+              "kuromoji_part_of_speech",
+              "cjk_width",
+              "stop",
+              "ja_stop",
+              "kuromoji_stemmer",
+              "lowercase"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "commit": {
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string",
+          "analyzer": "kuromoji"
+        },
+        "timestamp": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        },
+        "version": {
+          "type": "string",
+          "index": "not_analyzed"
+        }
+      }
+    },
+    "mail": {
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "mailingList": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "timestamp": {
+          "type": "date",
+          "format": "YYYY-MM-dd HH:mm:ss"
+        }
+      }
+    }
+  }
+}
